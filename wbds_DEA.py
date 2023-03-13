@@ -21,13 +21,6 @@ import matplotlib.pylab as plt
 from bioinfokit import visuz
 import plotly.figure_factory as ff
 
-# import numpy as np
-# from adjustText import adjust_text
-
-# from bioinfokit import analys
-# import glob
-# import seaborn as sns
-
 # %% Inicializo la carpeta donde voy a trabajar.
 
 print('Paso 1: Inicialización')

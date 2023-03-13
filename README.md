@@ -18,17 +18,26 @@ El análisis de expresión diferencial de genes a partir de datos de RNA-seq se 
   * plotly
   * pydeseq2
 
+Para correr el script se sugiere clonar el repositorio a través de la línea de comando:
+
+```
+cd <path a directorio padre>
+```
+```
+git clone https://github.com/gaschettino/ProyectoFinal_Camp
+```
+
 ## Solución de problemas
 
 - Instalación de paquetes:
 
     Se pueden visualizar los paquetes instalados con el siguiente comando:
 
-         pip list
+```pip list```
 
     De ser necesario se lo instala con 
 
-         pip install <nombre del paquete>
+```pip install <nombre del paquete>```
 
 - Compatibilidad del dataframe inicial.
 

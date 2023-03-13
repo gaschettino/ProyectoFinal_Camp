@@ -250,15 +250,47 @@ genesfiltrados=up['index'][0:10].tolist()+down['index'][0:10].tolist()
 filenames=outfolder+'/VolcanoPlot_4'
 visuz.GeneExpression.volcano(df=df_plot, lfc='log2FC', pv='p-value', plotlegend=True, legendpos='upper right', legendanchor=(1.46,1), color=("#00239CFF", "grey", "#E10600FF"), valpha=0.5, geneid="GeneNames",genenames=tuple(genesfiltrados), gfont=6, dotsize=4, sign_line=True, figname=filenames, axtickfontname='Verdana', axlabelfontname='Verdana', )
 
-# %%
+# %% PCA: No es significativa 
+# =============================================================================
+# 
+# from sklearn.preprocessing import StandardScaler
+# 
+# features = df_conteo.columns
+# # Separating out the features
+# x1 = df_conteo.loc[:, features].values
+# 
+# clase=df_clase.reset_index(drop=True)
+# # Separating out the target
+# y1 = clase.loc[:,['condicion']].values
+# 
+# # Standardizing the features
+# x1 = StandardScaler().fit_transform(x1)
+# 
+# from sklearn.decomposition import PCA
+# 
+# pca = PCA(n_components=2)
+# 
+# principalComponents = pca.fit_transform(x1)
+# 
+# principalDf = pd.DataFrame(data = principalComponents, columns = ['principal component 1', 'principal component 2'])
+# finalDf = pd.concat([principalDf, clase[['condicion']]], axis = 1)
+# 
+# fig = plt.figure(figsize = (8,8))
+# ax = fig.add_subplot(1,1,1) 
+# ax.set_xlabel('Principal Component 1', fontsize = 15)
+# ax.set_ylabel('Principal Component 2', fontsize = 15)
+# ax.set_title('2 component PCA', fontsize = 20)
+# targets = ['Positivo', 'Negativo']
+# colors = ['r', 'g']
+# for target, color in zip(targets,colors):
+#     indicesToKeep = finalDf['condicion'] == target
+#     ax.scatter(finalDf.loc[indicesToKeep, 'principal component 1']
+#                , finalDf.loc[indicesToKeep, 'principal component 2']
+#                , c = color
+#                , s = 50)
+# ax.legend(targets)
+# ax.grid()
+# =============================================================================
 
-from sklearn.preprocessing import StandardScaler
-
-# Separating out the features
-x = df_conteo.columns.values
-
-# Separating out the target
-y = df.loc[:,['target']].values
-
-# Standardizing the features
-x = StandardScaler().fit_transform(x)
+# %% HetMap
+# Por una cuestión de visibilización se deben hacer 

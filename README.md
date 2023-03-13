@@ -52,9 +52,9 @@ df_clase=pd.read_csv("**Nuevo path**", sep=' ', header=0)
 ```
 
 - Path de trabajo:
-El programa va a correr en el home a menos que se indique donde se quiere correr como una lista en la variable. si está trabajando en más de una pc y se tienen diferentes paths se pueden agregar a la lista separandolos por coma. 
+El programa va a correr en el home a menos que se indique donde se quiere correr como una lista en la variable. si está trabajando en más de una pc y se tienen diferentes paths se pueden agregar a la lista separandolos por coma, siempre respetando que al final se encuentre el directorio actual. 
 
-```pathlist=["**path1**","**path2**"]```
+```pathlist=["**path1**","**path2**", os.getcwd()]]```
 
 
 ## Input y Output data

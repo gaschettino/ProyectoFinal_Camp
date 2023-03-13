@@ -3,10 +3,10 @@
 
 ## Objetivo del proyecto
 - Finalidad que persigue tu proyecto o el problema que quieres resolver.
+El análisis de expresión diferencial de genes a partir de datos de RNA-seq se realiza casi exclusivamente en el lenguaje R. 
+Con el objetivo de aplicar lo aprendido en el 
 
 ## Instalación
-- Indicar el software y bases de datos específicos del área utilizados y por qué.
-
 * Python >= 3.0
 * Paquetes de python:
   * os

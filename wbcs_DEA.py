@@ -19,8 +19,9 @@ from pydeseq2.ds import DeseqStats
 import pickle as pkl
 import matplotlib.pylab as plt
 from bioinfokit import visuz
-import numpy as np
-from adjustText import adjust_text
+import seaborn as sns
+# import numpy as np
+# from adjustText import adjust_text
 
 # from bioinfokit import analys
 # import glob
@@ -29,7 +30,7 @@ from adjustText import adjust_text
 # %% Inicializo la carpeta donde voy a trabajar.
 
 print('Paso 1: Inicialización')
-pathlist=["/home/usuario/OneDrive/RnaSeq", "C:/Users/Asus/Documents/ProyectoFinal_Camp", "/mnt/c/Users/Asus/Documents/ProyectoFinal_Camp"]
+pathlist=["/home/usuario/Documents/ProyectoFinal_Camp", "C:/Users/Asus/Documents/ProyectoFinal_Camp", "/mnt/c/Users/Asus/Documents/ProyectoFinal_Camp"]
 flag=False
 for p in pathlist:
     if os.path.isdir(p) and not flag:
@@ -52,7 +53,7 @@ del flag, pathlist, p
 # %% Lectura y conformación de dataframes
 
 # Lectura de la count matrix con los pacientes positivos y negativos tomados de GSE152075.
-df_conteo=pd.read_csv("GSE152075_raw_counts_GEO.txt", sep=' ', header=0)
+df_conteo=pd.read_csv("InputData/GSE152075_raw_counts_GEO.txt", sep=' ', header=0)
 
 
 # Generación de una matriz con las condiciones de COVID de los pacientes del estudio.
@@ -71,6 +72,7 @@ df_conteo=df_conteo.T
 # Aquellos que no tienen ninguna anotación respecto a la condición serán eliminados
 
 #Si bien en el caso ejemplo el paso de eliminación por condición no es necesario, como es frecuente que ocurra y para futura utilidad del script se decide dejarlo.
+print('Filtrado de pacientes sin clasificación')
 npacientes=len(df_clase)
 mtras = ~df_clase.condicion.isna()
 print(f'De un total de {npacientes} pacientes se quedaron {len(mtras)}')
@@ -79,6 +81,7 @@ df_clase = df_clase.loc[mtras]
 
 
 # Se borran aquellos genes que no tienen lecturas en ningún paciente
+print('Filtrado de genes sin lecturas en ningún paciente')
 ngenes=len(df_conteo.columns)
 genes_keep = df_conteo.columns[df_conteo.sum(axis=0) > 0]
 print(f'De un total de {ngenes} genes se quedaron {len(genes_keep)}')
@@ -116,7 +119,7 @@ estadistica.summary()
 with open(os.path.join(outfolder, "estadistica.pkl"), "wb") as f:
     pkl.dump(estadistica, f)
     
-print('res_estad.result_df')
+
 df_summary=estadistica.results_df
 
 filepath=outfolder+'/res_estad.result_df.txt'
@@ -199,53 +202,60 @@ up = df_shrink[(df_shrink['log2FoldChange']>=2)&(df_shrink['padj']<=0.01)].sort_
 
 # %% VolcanoPlot 1
 
-plotname=outfolder+'/VolcanoPlot_1.png'
-fig = plt.figure()
-plt.scatter(x=df_shrink.log2FoldChange,y=df_shrink.padj.apply(lambda x:-np.log10(x)),s=1,label="Not significant",color="grey")
-
-plt.scatter(x=down['log2FoldChange'],y=down['padj'].apply(lambda x:-np.log10(x)),s=3,label="Down-regulated",color="blue")
-plt.scatter(x=up['log2FoldChange'],y=up['padj'].apply(lambda x:-np.log10(x)),s=3,label="Up-regulated",color="red")
-
-plt.xlabel("log2FoldChange")
-plt.ylabel("-logFDR")
-plt.axvline(-2,color="grey",linestyle="--")
-plt.axvline(2,color="grey",linestyle="--")
-plt.axhline(2,color="grey",linestyle="--")
-plt.legend()
-fig.savefig(plotname, dpi=fig.dpi)
+# =============================================================================
+# plotname=outfolder+'/VolcanoPlot_1.png'
+# fig = plt.figure()
+# plt.scatter(x=df_shrink.log2FoldChange,y=df_shrink.padj.apply(lambda x:-np.log10(x)),s=1,label="Not significant",color="grey")
+# 
+# plt.scatter(x=down['log2FoldChange'],y=down['padj'].apply(lambda x:-np.log10(x)),s=3,label="Down-regulated",color="blue")
+# plt.scatter(x=up['log2FoldChange'],y=up['padj'].apply(lambda x:-np.log10(x)),s=3,label="Up-regulated",color="red")
+# 
+# plt.xlabel("log2FoldChange")
+# plt.ylabel("-logFDR")
+# plt.axvline(-2,color="grey",linestyle="--")
+# plt.axvline(2,color="grey",linestyle="--")
+# plt.axhline(2,color="grey",linestyle="--")
+# plt.legend()
+# fig.savefig(plotname, dpi=fig.dpi)
+# 
+# =============================================================================
 
 # %% VolcanoPlot 2
-
-
-plotname=outfolder+'/VolcanoPlot_2.png'
-fig = plt.figure()
-plt.scatter(x=df_shrink['log2FoldChange'],y=df_shrink['padj'].apply(lambda x:-np.log10(x)),s=1,label="Not significant",color="grey")
-# highlight down- or up- regulated genes
-plt.scatter(x=down['log2FoldChange'],y=down['padj'].apply(lambda x:-np.log10(x)),s=3,label="Down-regulated",color="blue")
-plt.scatter(x=up['log2FoldChange'],y=up['padj'].apply(lambda x:-np.log10(x)),s=3,label="Up-regulated",color="red")
-texts=[]
-for i,r in up.iterrows():
-    texts.append(plt.text(x=r['log2FoldChange'],y=-np.log10(r['padj']),s=i))
-adjust_text(texts,arrowprops=dict(arrowstyle="-", color='black', lw=0.1))
-plt.xlabel("log2FoldChange")
-plt.ylabel("-logFDR")
-plt.axvline(-2,color="grey",linestyle="--")
-plt.axvline(2,color="grey",linestyle="--")
-plt.axhline(2,color="grey",linestyle="--")
-plt.legend()
-fig.savefig(plotname, dpi=fig.dpi)
+# =============================================================================
+# 
+# plotname=outfolder+'/VolcanoPlot_2.png'
+# fig = plt.figure()
+# plt.scatter(x=df_shrink['log2FoldChange'],y=df_shrink['padj'].apply(lambda x:-np.log10(x)),s=1,label="Not significant",color="grey")
+# # highlight down- or up- regulated genes
+# plt.scatter(x=down['log2FoldChange'],y=down['padj'].apply(lambda x:-np.log10(x)),s=3,label="Down-regulated",color="blue")
+# plt.scatter(x=up['log2FoldChange'],y=up['padj'].apply(lambda x:-np.log10(x)),s=3,label="Up-regulated",color="red")
+# texts=[]
+# for i,r in up.iterrows():
+#     texts.append(plt.text(x=r['log2FoldChange'],y=-np.log10(r['padj']),s=i))
+# adjust_text(texts,arrowprops=dict(arrowstyle="-", color='black', lw=0.1))
+# plt.xlabel("log2FoldChange")
+# plt.ylabel("-logFDR")
+# plt.axvline(-2,color="grey",linestyle="--")
+# plt.axvline(2,color="grey",linestyle="--")
+# plt.axhline(2,color="grey",linestyle="--")
+# plt.legend()
+# fig.savefig(plotname, dpi=fig.dpi)
+# =============================================================================
 
 # %% VolcanoPlot 3
-df_plot=df_shrink[['index','log2FoldChange','padj']]
+
+df_plot=df_shrink[['log2FoldChange','padj']]
 df_plot=df_plot.dropna(subset=['padj'])
+df_plot=df_plot.reset_index()
 df_plot.rename(columns={"index":'GeneNames', "log2FoldChange":'log2FC', "padj":'p-value'}, inplace=True)
+
 
 filenames=outfolder+'/VolcanoPlot_3'
 visuz.GeneExpression.volcano(df=df_plot, lfc='log2FC', pv='p-value', plotlegend=True, legendpos='upper right', legendanchor=(1.46,1), color=("#00239CFF", "grey", "#E10600FF"), valpha=0.5, geneid="GeneNames", gstyle=2, sign_line=True, figname=filenames, axtickfontname='Verdana', axlabelfontname='Verdana')
 
 
 # %% VolcanoPlot 4
-genesfiltrados=up['index'][0:10].tolist()+down['index'][0:10].tolist()
+genesfiltrados=up.index[0:10].tolist()+down.index[0:10].tolist()
 
 filenames=outfolder+'/VolcanoPlot_4'
 visuz.GeneExpression.volcano(df=df_plot, lfc='log2FC', pv='p-value', plotlegend=True, legendpos='upper right', legendanchor=(1.46,1), color=("#00239CFF", "grey", "#E10600FF"), valpha=0.5, geneid="GeneNames",genenames=tuple(genesfiltrados), gfont=6, dotsize=4, sign_line=True, figname=filenames, axtickfontname='Verdana', axlabelfontname='Verdana', )
@@ -291,6 +301,65 @@ visuz.GeneExpression.volcano(df=df_plot, lfc='log2FC', pv='p-value', plotlegend=
 # ax.legend(targets)
 # ax.grid()
 # =============================================================================
+# %% Tabla con los genes más diferenciados.
 
-# %% HetMap
-# Por una cuestión de visibilización se deben hacer 
+df_diff=pd.concat([up, down], axis = 0)
+df_diff=df_diff.sort_values('log2FoldChange', key=abs, ascending=False)
+df_diff=df_diff.reset_index()
+
+import plotly.figure_factory as ff
+
+
+df = up.copy()
+df=df[['log2FoldChange', 'pvalue', 'padj']]
+df.log2FoldChange=df.log2FoldChange.round(decimals=3)
+
+
+filenames=outfolder+'/Tabla_Genes_Up_bypadj.png'
+fig =  ff.create_table(df.iloc[:30], index=True)
+fig.update_layout(
+    autosize=True,
+)
+fig.write_image(filenames, scale=2)
+fig.show()
+df=df.sort_values('log2FoldChange')
+filenames=outfolder+'/Tabla_Genes_up_bylog.png'
+fig =  ff.create_table(df.iloc[:30], index=True)
+fig.update_layout(
+    autosize=True,
+)
+fig.write_image(filenames, scale=2)
+fig.show()
+
+del df
+
+df = down.copy()
+df=df[['log2FoldChange', 'pvalue', 'padj']]
+df.log2FoldChange=df.log2FoldChange.round(decimals=3)
+
+filenames=outfolder+'/Tabla_Genes_down_bypaj.png'
+fig =  ff.create_table(df.iloc[:30], index=True)
+fig.update_layout(
+    autosize=True,
+)
+fig.write_image(filenames, scale=2)
+fig.show()
+df=df.sort_values('log2FoldChange')
+filenames=outfolder+'/Tabla_Genes_down_bylog.png'
+fig =  ff.create_table(df.iloc[:30], index=True)
+fig.update_layout(
+    autosize=True,
+)
+fig.write_image(filenames, scale=2)
+fig.show()
+
+del df
+
+# %% HeatMap
+# Por una cuestión de visibilización se deben hacer menos genes
+
+# normalizar counts
+# generar una tabla genes vs pacientes
+# fraccionar por 100 genes up y down regulados. Los estadisticamente más significativos
+# Hacer el gráfico
+

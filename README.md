@@ -50,13 +50,20 @@ por
 ```
 df_clase=pd.read_csv("**Nuevo path**", sep=' ', header=0)
 ```
+
+- Path de trabajo:
+El programa va a correr en el home a menos que se indique donde se quiere correr como una lista en la variable. si está trabajando en más de una pc y se tienen diferentes paths se pueden agregar a la lista separandolos por coma. 
+
+```pathlist=["**path1**","**path2**"]```
+
+
 ## Input y Output data
 
 #### Input
 - Matriz de conteo de reads por gen
 - Tabla con la clasificación de cada paciente
 
-#### Input
+#### Output
 - Histograma con el comportamiento del p-valor
 - Tabla con los 30 genes upregulados ordenados por el p-valor ajustado y por el log fold change
 - Tabla con los 30 genes downregulados ordenados por el p-valor ajustado y por el log fold change

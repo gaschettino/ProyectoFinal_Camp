@@ -50,13 +50,28 @@ por
 ```
 df_clase=pd.read_csv("**Nuevo path**", sep=' ', header=0)
 ```
+## Input y Output data
 
-## Pasos del proyecto
+#### Input
+- Matriz de conteo de reads por gen
+- Tabla con la clasificación de cada paciente
+
+#### Input
+- Histograma con el comportamiento del p-valor
+- Tabla con los 30 genes upregulados ordenados por el p-valor ajustado y por el log fold change
+- Tabla con los 30 genes downregulados ordenados por el p-valor ajustado y por el log fold change
+- Volcano plot sin anotar
+- Volcano plot con los genes más significativos anotados.
+
+## Pasos del script
 
 El acceso a la información puede venir de múltiples plataformas. 
+
 En esta oportunidad se decidió buscar información en ncbi y a partir de ahí buscar la información en GEO _https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi_. 
+
 Con el id del proyecto se puede realizar la búsqueda y nos lleva a una página similar como la siguiente: 
 https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152075
+
 Aquí se puede descargar al final de la página el archivo *_raw_counts_GEO.txt.gz que va a contener la información necesaria.
 
 Una vez realizada la descarga y la descompresión del archivo, se puede proceser a correr el script ```wbds_DEA.py```, teniendo en cuenta de hacer las modificaciones de cambio de nombre de archivo comentado en el paso anterior. Este script se puede dividir conceptualmente en 10 secciones:
@@ -96,3 +111,7 @@ En base al análisis obtenido a partir del script y la publicación incial se pu
 - https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3000849
 - https://www.sciencedirect.com/science/article/pii/S0168170223000151#bib0041
 - https://www.sciencedirect.com/science/article/pii/S258900422030777X
+
+##
+Proyecto Final WBDS - Análisis de datos de expresión de genes con python by Giovanna Aschettino is marked with CC0 1.0. To view a copy of this license, visit http://creativecommons.org/publicdomain/zero/1.0
+

@@ -6,6 +6,8 @@ Created on Sun Mar 12 17:54:05 2023
 
 toy data: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE152075
 https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3000849
+https://www.sciencedirect.com/science/article/pii/S0168170223000151#bib0041
+https://www.sciencedirect.com/science/article/pii/S258900422030777X
 
 """
 # %% Paquetes a cargar
@@ -248,3 +250,15 @@ genesfiltrados=up['index'][0:10].tolist()+down['index'][0:10].tolist()
 filenames=outfolder+'/VolcanoPlot_4'
 visuz.GeneExpression.volcano(df=df_plot, lfc='log2FC', pv='p-value', plotlegend=True, legendpos='upper right', legendanchor=(1.46,1), color=("#00239CFF", "grey", "#E10600FF"), valpha=0.5, geneid="GeneNames",genenames=tuple(genesfiltrados), gfont=6, dotsize=4, sign_line=True, figname=filenames, axtickfontname='Verdana', axlabelfontname='Verdana', )
 
+# %%
+
+from sklearn.preprocessing import StandardScaler
+
+# Separating out the features
+x = df_conteo.columns.values
+
+# Separating out the target
+y = df.loc[:,['target']].values
+
+# Standardizing the features
+x = StandardScaler().fit_transform(x)

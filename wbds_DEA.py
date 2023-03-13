@@ -19,7 +19,8 @@ from pydeseq2.ds import DeseqStats
 import pickle as pkl
 import matplotlib.pylab as plt
 from bioinfokit import visuz
-import seaborn as sns
+import plotly.figure_factory as ff
+
 # import numpy as np
 # from adjustText import adjust_text
 
@@ -200,49 +201,8 @@ df_shrink.to_csv(filepath, sep='\t',index=False)
 down = df_shrink[(df_shrink['log2FoldChange']<=-2)&(df_shrink['padj']<=0.01)].sort_values('padj')
 up = df_shrink[(df_shrink['log2FoldChange']>=2)&(df_shrink['padj']<=0.01)].sort_values('padj')
 
-# %% VolcanoPlot 1
 
-# =============================================================================
-# plotname=outfolder+'/VolcanoPlot_1.png'
-# fig = plt.figure()
-# plt.scatter(x=df_shrink.log2FoldChange,y=df_shrink.padj.apply(lambda x:-np.log10(x)),s=1,label="Not significant",color="grey")
-# 
-# plt.scatter(x=down['log2FoldChange'],y=down['padj'].apply(lambda x:-np.log10(x)),s=3,label="Down-regulated",color="blue")
-# plt.scatter(x=up['log2FoldChange'],y=up['padj'].apply(lambda x:-np.log10(x)),s=3,label="Up-regulated",color="red")
-# 
-# plt.xlabel("log2FoldChange")
-# plt.ylabel("-logFDR")
-# plt.axvline(-2,color="grey",linestyle="--")
-# plt.axvline(2,color="grey",linestyle="--")
-# plt.axhline(2,color="grey",linestyle="--")
-# plt.legend()
-# fig.savefig(plotname, dpi=fig.dpi)
-# 
-# =============================================================================
-
-# %% VolcanoPlot 2
-# =============================================================================
-# 
-# plotname=outfolder+'/VolcanoPlot_2.png'
-# fig = plt.figure()
-# plt.scatter(x=df_shrink['log2FoldChange'],y=df_shrink['padj'].apply(lambda x:-np.log10(x)),s=1,label="Not significant",color="grey")
-# # highlight down- or up- regulated genes
-# plt.scatter(x=down['log2FoldChange'],y=down['padj'].apply(lambda x:-np.log10(x)),s=3,label="Down-regulated",color="blue")
-# plt.scatter(x=up['log2FoldChange'],y=up['padj'].apply(lambda x:-np.log10(x)),s=3,label="Up-regulated",color="red")
-# texts=[]
-# for i,r in up.iterrows():
-#     texts.append(plt.text(x=r['log2FoldChange'],y=-np.log10(r['padj']),s=i))
-# adjust_text(texts,arrowprops=dict(arrowstyle="-", color='black', lw=0.1))
-# plt.xlabel("log2FoldChange")
-# plt.ylabel("-logFDR")
-# plt.axvline(-2,color="grey",linestyle="--")
-# plt.axvline(2,color="grey",linestyle="--")
-# plt.axhline(2,color="grey",linestyle="--")
-# plt.legend()
-# fig.savefig(plotname, dpi=fig.dpi)
-# =============================================================================
-
-# %% VolcanoPlot 3
+# %% VolcanoPlot sin anotar
 
 df_plot=df_shrink[['log2FoldChange','padj']]
 df_plot=df_plot.dropna(subset=['padj'])
@@ -250,14 +210,15 @@ df_plot=df_plot.reset_index()
 df_plot.rename(columns={"index":'GeneNames', "log2FoldChange":'log2FC', "padj":'p-value'}, inplace=True)
 
 
-filenames=outfolder+'/VolcanoPlot_3'
+filenames=outfolder+'/VolcanoPlot'
 visuz.GeneExpression.volcano(df=df_plot, lfc='log2FC', pv='p-value', plotlegend=True, legendpos='upper right', legendanchor=(1.46,1), color=("#00239CFF", "grey", "#E10600FF"), valpha=0.5, geneid="GeneNames", gstyle=2, sign_line=True, figname=filenames, axtickfontname='Verdana', axlabelfontname='Verdana')
 
 
-# %% VolcanoPlot 4
+# %% VolcanoPlot anotado
+
 genesfiltrados=up.index[0:10].tolist()+down.index[0:10].tolist()
 
-filenames=outfolder+'/VolcanoPlot_4'
+filenames=outfolder+'/VolcanoPlot_anot'
 visuz.GeneExpression.volcano(df=df_plot, lfc='log2FC', pv='p-value', plotlegend=True, legendpos='upper right', legendanchor=(1.46,1), color=("#00239CFF", "grey", "#E10600FF"), valpha=0.5, geneid="GeneNames",genenames=tuple(genesfiltrados), gfont=6, dotsize=4, sign_line=True, figname=filenames, axtickfontname='Verdana', axlabelfontname='Verdana', )
 
 # %% PCA: No es significativa 
@@ -303,17 +264,14 @@ visuz.GeneExpression.volcano(df=df_plot, lfc='log2FC', pv='p-value', plotlegend=
 # =============================================================================
 # %% Tabla con los genes más diferenciados.
 
-df_diff=pd.concat([up, down], axis = 0)
-df_diff=df_diff.sort_values('log2FoldChange', key=abs, ascending=False)
-df_diff=df_diff.reset_index()
-
-import plotly.figure_factory as ff
-
-
+# =============================================================================
+# df_diff=pd.concat([up, down], axis = 0)
+# df_diff=df_diff.sort_values('log2FoldChange', key=abs, ascending=False)
+# df_diff=df_diff.reset_index()
+# =============================================================================
 df = up.copy()
 df=df[['log2FoldChange', 'pvalue', 'padj']]
 df.log2FoldChange=df.log2FoldChange.round(decimals=3)
-
 
 filenames=outfolder+'/Tabla_Genes_Up_bypadj.png'
 fig =  ff.create_table(df.iloc[:30], index=True)
@@ -332,6 +290,7 @@ fig.write_image(filenames, scale=2)
 fig.show()
 
 del df
+
 
 df = down.copy()
 df=df[['log2FoldChange', 'pvalue', 'padj']]
@@ -354,12 +313,3 @@ fig.write_image(filenames, scale=2)
 fig.show()
 
 del df
-
-# %% HeatMap
-# Por una cuestión de visibilización se deben hacer menos genes
-
-# normalizar counts
-# generar una tabla genes vs pacientes
-# fraccionar por 100 genes up y down regulados. Los estadisticamente más significativos
-# Hacer el gráfico
-

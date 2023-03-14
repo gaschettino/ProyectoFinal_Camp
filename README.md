@@ -112,13 +112,17 @@ Una vez realizada la descarga y la descompresión del archivo, se puede proceser
 Los datos obtenidos de la base de datos GEO corresponden a un estudio realizado para evaluar la respuesta antiviral en pacientes con SARS-CoV-2.
 En base al análisis obtenido a partir del script y la publicación incial se puede ver que los genes significativos estadísticamente se correlacionan con los publicados, siendo importantes los genes asociados a respuesta antiviral.
 
-### Listado con los 30 genes down reculados más significativos
+### Listado con los 30 genes down regulados más significativos
 
 ![Tabla_Genes_down_bypaj](https://user-images.githubusercontent.com/54379644/224775418-af4eb28a-9531-47db-8fc0-3094b5623c59.png)
 
-### Listado con los 30 genes up reculados más significativos
+### Listado con los 30 genes up regulados más significativos
 
 ![Tabla_Genes_Up_bypadj](https://user-images.githubusercontent.com/54379644/224775442-bad27b0c-7a8f-4221-a2b7-4a03fb39f884.png)
+
+## Youtube
+
+https://youtu.be/SgRBY_LaMgE
 
 
 ## Links a bibliografía consultada

@@ -120,7 +120,7 @@ En base al análisis obtenido a partir del script y la publicación incial se pu
 
 ![Tabla_Genes_Up_bypadj](https://user-images.githubusercontent.com/54379644/224775442-bad27b0c-7a8f-4221-a2b7-4a03fb39f884.png)
 
-## Youtube
+## Video explicativo
 
 https://youtu.be/SgRBY_LaMgE
 
